@@ -20,23 +20,23 @@ SAM (Segment Anything Model) It is agnostic model that can segment every single 
 
 ## Project steps
 Part 1 - Completed on Roboflow
-■ Annotation
 
-■ Augmentation
+  ■ Annotation
+  ■ Augmentation
 
 Part 2 - 01_Yolo_Training_PCBQualityControl.ipynb
-■ Yolo training on two classes:
+  ■ Yolo training on two classes:
 
-voids
-component (darker background)
-■ Yolo validation
+    voids
+    component (darker background)
+  ■ Yolo validation
 
 Part 3 - 02_Inference_SAM_PCBQualityControl.ipynb
-■ Using a pre-trained SAM to segment voids and background, using the output of yolo:
+  ■ Using a pre-trained SAM to segment voids and background, using the output of yolo:
 
-Input: image and corresponding bounding boxes given by yolo as output
+  Input: image and corresponding bounding boxes given by yolo as output
 
-Output: segmented areas with two different masks
+  Output: segmented areas with two different masks
 
 ![image](https://github.com/ajosegun/PCBQualityControl/assets/94995067/48bbedd5-637c-4654-8cd7-578d7dac0389)
 
