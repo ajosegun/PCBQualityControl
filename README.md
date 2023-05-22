@@ -38,6 +38,7 @@ Input: image and corresponding bounding boxes given by yolo as output
 
 Output: segmented areas with two different masks
 
+![image](https://github.com/ajosegun/PCBQualityControl/assets/94995067/48bbedd5-637c-4654-8cd7-578d7dac0389)
 
 ## Getting Started
 To get started with this project, you will need to have the following installed:
