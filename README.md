@@ -26,6 +26,7 @@ Part 1 - Completed on Roboflow
   ■ Augmentation
 
 Part 2 - 01_Yolo_Training_PCBQualityControl.ipynb
+
   ■ Yolo training on two classes:
 
   voids
@@ -35,6 +36,7 @@ Part 2 - 01_Yolo_Training_PCBQualityControl.ipynb
   ■ Yolo validation
 
 Part 3 - 02_Inference_SAM_PCBQualityControl.ipynb
+
   ■ Using a pre-trained SAM to segment voids and background, using the output of yolo:
 
   Input: image and corresponding bounding boxes given by yolo as output
