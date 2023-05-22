@@ -22,13 +22,16 @@ SAM (Segment Anything Model) It is agnostic model that can segment every single 
 Part 1 - Completed on Roboflow
 
   ■ Annotation
+  
   ■ Augmentation
 
 Part 2 - 01_Yolo_Training_PCBQualityControl.ipynb
   ■ Yolo training on two classes:
 
-    voids
-    component (darker background)
+  voids
+  
+  component (darker background)
+  
   ■ Yolo validation
 
 Part 3 - 02_Inference_SAM_PCBQualityControl.ipynb
