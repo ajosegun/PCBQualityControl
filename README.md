@@ -65,10 +65,6 @@ The code is divided into 2 notebooks.
 2. 02_Inference_SAM_PCBQualityControl.ipynb
 
 
-## Conclusion
-The Pix2Pix GAN is a powerful tool for image-to-image translation. With this model, you can translate images from one domain to another, such as from daytime to nighttime, or from sketches to photographs. The model is easy to use and can be trained on a variety of different datasets.
-
-
 
 
 
