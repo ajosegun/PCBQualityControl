@@ -1,0 +1,6 @@
+venv
+.DS_Store
+yolo_best_model.zip
+*.pth
+runs
+__pycache__/
