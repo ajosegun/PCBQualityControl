@@ -19,13 +19,14 @@ SAM (Segment Anything Model) It is agnostic model that can segment every single 
 | Roboflow | An end-to-end computer vision platform that makes it easy to build, train, and deploy computer vision models. |
 
 ## Project steps
-Part 1 - Completed on Roboflow
+**Part 1 - Completed on Roboflow**
 
   ■ Annotation
   
   ■ Augmentation
+  
 
-Part 2 - 01_Yolo_Training_PCBQualityControl.ipynb
+**Part 2 - 01_Yolo_Training_PCBQualityControl.ipynb**
 
   ■ Yolo training on two classes:
 
@@ -35,7 +36,7 @@ Part 2 - 01_Yolo_Training_PCBQualityControl.ipynb
   
   ■ Yolo validation
 
-Part 3 - 02_Inference_SAM_PCBQualityControl.ipynb
+**Part 3 - 02_Inference_SAM_PCBQualityControl.ipynb**
 
   ■ Using a pre-trained SAM to segment voids and background, using the output of yolo:
 
