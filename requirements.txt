@@ -8,3 +8,4 @@ onnxruntime
 onnx
 streamlit
 gunicorn==19.9.0
+urllib3<2.0.0
