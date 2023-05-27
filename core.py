@@ -8,6 +8,7 @@ import torch
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
+from PIL import Image
 
 from segment_anything import SamAutomaticMaskGenerator, sam_model_registry, SamPredictor
 
@@ -20,29 +21,15 @@ print(HOME)
 
 ultralytics.checks()
 
-# print("Downloading test datasets.")
-
-# if not os.path.exists(f"{HOME}/datasets"):
-#     os.makedirs(f"{HOME}/datasets")
-
-# rf = Roboflow(api_key="Hp5hidJ2MxhXMd3IYOmb")
-# project = rf.workspace("samdeploymentmodel").project("pcb_quality_control")
-# dataset = project.version(1).download("yolov8")
-
 # SAM_weights_path = "SAM_weights"
 sam_checkpoint_path = "sam_vit_h_4b8939.pth"
 model_type = "vit_h"
 model_checkpoints_url = "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth"
 
 print("Looking for SAM_weights.")
-# if not os.path.exists(SAM_weights_path):
-#     os.mkdir(SAM_weights_path)
 
 if not os.path.exists("sam_vit_h_4b8939.pth"):
     print("SAM_weights not found! Downloading...")
-
-    # if not os.path.exists(SAM_weights_path):
-    #     os.mkdir(SAM_weights_path)
 
     try:
         response = requests.get(model_checkpoints_url)
@@ -71,11 +58,24 @@ def show_mask(mask, ax, cls=1, random_color=False):
             color = np.array([30/255, 144/255, 255/255, 0.7])
         else:
             color = np.array([255/255, 0.0, 0.0, 0.6])
+            
+            
+   # color_rgb = color[:3]  # Extract the first three channels (red, green, blue)
+    #alpha = color[3]  # Extract the alpha channel
+    
+    # Multiply the RGB values by the alpha channel
+    #color_rgb *= alpha
+    
+    # Convert the RGB values to the range [0, 255]
+    #color_rgb *= 255
+   # color_rgb = color_rgb.astype(np.uint8)
 
     h, w = mask.shape[-2:]
     mask_image = mask.reshape(h, w, 1) * color.reshape(1, 1, -1)
-    # ax.imshow(mask_image)
+    #return ax.imshow(mask_image)
+    
     return mask_image
+    
 
 
 def polygon_area(polygon):
@@ -88,6 +88,22 @@ def polygon_area(polygon):
         signed_area += x_i * y_next - x_next * y_i
 
     return abs(signed_area) / 2
+    
+def remove_dir(directory):
+
+    # Check if the directory exists
+    if os.path.exists(directory):
+        # Remove all files and subdirectories within the directory
+        for root, dirs, files in os.walk(directory, topdown=False):
+            for file in files:
+                file_path = os.path.join(root, file)
+                os.remove(file_path)
+            for dir in dirs:
+                dir_path = os.path.join(root, dir)
+                os.rmdir(dir_path)
+        
+        # Remove the empty directory
+        os.rmdir(directory)
 
 
 print("Loading Yolo model.")
@@ -108,8 +124,13 @@ def process(uploaded_image, uploaded_file_name):
     print("Predicting with Yolo model.")
     results_for_sam = model.predict(image,  # source=image_path,
                                     conf=0.25,
-                                    # save=True
+                                    save=True
                                     )
+    
+    img_dir = HOME + "/runs/detect/predict/"          
+    image_Yolo = Image.open(img_dir + "image0.jpg")
+    #image_Yolo = cv2.cvtColor(image_Yolo, cv2.COLOR_BGR2RGB)
+    remove_dir(img_dir)
 
     input_box = results_for_sam[0].boxes.xyxy.cpu().data.numpy()
     class_p = results_for_sam[0].boxes.cls.cpu().data.numpy()
@@ -131,8 +152,37 @@ def process(uploaded_image, uploaded_file_name):
 
     sorted_masks, sorted_class_p = masks[sorted_indices], class_p[sorted_indices]
 
+    sam_img = image.copy()
+    #sam_img_ov = np.full([1004,1004,1], 0.0)
+    #sam_img = np.dstack((sam_img, sam_img_ov))
+    sam_img_list = list()
+    #print(sam_img.shape)
     for mask, cls in zip(sorted_masks, sorted_class_p):
-        sam_img = show_mask(mask.cpu().numpy(), plt.gca(), cls=cls)
+        sam_img2 = show_mask(mask.cpu().numpy(), plt.gca(), cls=cls)
+        #print(sam_img2.shape)
+        #sam_img += sam_img2.astype(np.uint8)
+        sam_img_list.append(sam_img2)
+        
+        
+    #sam_img = np.vstack(sam_img_list)
+    sam_img = np.zeros_like(sam_img_list[0], dtype=np.float32)
+    # Iterate over the image list and overlay each image onto the overlayed_image
+    for image in sam_img_list:
+        #sam_img = cv2.addWeighted(sam_img, 1.0, image, 1.0, 0.0, dtype=cv2.CV_32F)
+        sam_img = cv2.add(sam_img, image, dtype=cv2.CV_32F)
+    
+    # Convert the overlayed_image to the appropriate data type (e.g., uint8) for visualization
+    #sam_img = np.clip(sam_img, 0, 255).astype(np.uint8)
+    
+    # Normalize the overlayed_image to [0, 255]
+    sam_img = cv2.normalize(sam_img, None, 0, 255, cv2.NORM_MINMAX)
+
+# Convert the overlayed_image to the appropriate data type (e.g., uint8) for visualization
+    sam_img = sam_img.astype(np.uint8)
+
+    
+    print(sam_img.shape)
+        
 
     component_total_area = 0
     void_total_area = 0
@@ -168,4 +218,4 @@ def process(uploaded_image, uploaded_file_name):
     df = pd.DataFrame(data)
     print(df.head())
 
-    return df, sam_img  # , yolo_image  # , sam_image,
+    return df, image_Yolo, sam_img  # , yolo_image  # , sam_image,

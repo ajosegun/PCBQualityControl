@@ -21,11 +21,21 @@ def main():
             f"**Image Details:** Format: {image.format} / Size: {image.size} / Mode: {image.mode}")
 
         with st.spinner("Processing..."):
-            df, sam_img = core.process(image, uploaded_file.name)
-
+            df, image_Yolo, sam_img = core.process(image, uploaded_file.name)
+        print("To display")
+        
         # Display image
-        st.image(sam_img, caption="Sam Segmentation",
-                 width=300,)  # , use_column_width=True)
+        st.image(image_Yolo, 
+                  caption="Yolo Detection ",
+                 width=300
+                 )  # , use_column_width=True)
+                 
+                 
+        # Display image
+        st.image(sam_img, clamp=True, #channels='BGR',
+                  caption="Sam Segmentation",
+                 width=300
+                 )  # , use_column_width=True)
 
         st.dataframe(df)
     else:

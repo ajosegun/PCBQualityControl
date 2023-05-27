@@ -1,0 +1,9 @@
+venv
+venv7
+*zip
+__pycache__/
+scripts
+#.git
+#.github
+README.md
+*ipynb
