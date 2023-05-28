@@ -1,14 +1,14 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "ajosegun/pcbqualitycontrol",
-    "Update": "true"
+      "Name": "ajosegun/pcbqualitycontrol:latest",
+      "Update": "true"
   },
   "Ports": [
-    {
-      "ContainerPort": 8501,
-      "HostPort": 8501
-    }
+      {
+          "ContainerPort": 8080,
+          "HostPort": 8080
+      }
   ],
   "Logging": "/var/log/nginx"
 }
