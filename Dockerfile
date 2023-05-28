@@ -21,6 +21,9 @@ RUN apt-get update && apt-get install -y \
 COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
-EXPOSE 8501
-ENTRYPOINT ["streamlit","run"]
-CMD ["app.py"]
+EXPOSE 8080
+#ENTRYPOINT ["streamlit","run"]
+#CMD ["app.py", "--server.port", "8080"]
+
+# The command to launch streamlit app and expose it's port 8080, when container is up and running
+CMD streamlit run --server.port 8080 app.py

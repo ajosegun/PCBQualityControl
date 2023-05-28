@@ -219,3 +219,29 @@ def process(uploaded_image, uploaded_file_name):
     print(df.head())
 
     return df, image_Yolo, sam_img  # , yolo_image  # , sam_image,
+    
+    
+def get_system_info():
+    import psutil
+
+    # Get CPU information
+    cpu_count = psutil.cpu_count(logical=False)  # Number of physical CPUs
+    cpu_threads = psutil.cpu_count(logical=True)  # Number of logical CPUs
+    
+    # Get RAM information
+    ram_total = psutil.virtual_memory().total  # Total RAM in bytes
+    
+    # Get disk information
+    disk_usage = psutil.disk_usage('/')  # Disk usage of the root directory
+    disk_total = disk_usage.total  # Total disk space in bytes
+    disk_used = disk_usage.used  # Used disk space in bytes
+    
+    # Print the information
+    #print(f"CPU Count: {cpu_count}")
+    #print(f"CPU Threads: {cpu_threads}")
+    #print(f"Total RAM: {ram_total / (1024**3):.2f} GB")
+    #print(f"Total Disk Space: {disk_total / (1024**3):.2f} GB")
+    #print(f"Used Disk Space: {disk_used / (1024**3):.2f} GB")
+    
+    return f'System info: {cpu_threads} Threads, {cpu_count} CPUs, {ram_total / (1024**3):.2f} GB, {disk_used / (1024**3):.2f}/{disk_total / (1024**3):.2f} GB'
+

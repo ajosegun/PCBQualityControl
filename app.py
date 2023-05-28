@@ -11,6 +11,7 @@ def main():
         "Choose an image...", type=["jpg", "jpeg", "png"])
 
     if uploaded_file is not None:
+        st.write(core.get_system_info())
         # Read image
         image = Image.open(uploaded_file)
 
