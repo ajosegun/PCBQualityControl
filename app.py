@@ -4,12 +4,12 @@ import core
 
 
 def main():
-    st.title("Upload the PCB Image")
+    st.title("PCB Hole qualification")
 
     # Upload image
     uploaded_file = st.file_uploader(
-        "Choose an image...", type=["jpg", "jpeg", "png"])
-
+        "Upload a PBC image...", type=["jpg", "jpeg", "png"])
+    results=[]
     if uploaded_file is not None:
         st.write(core.get_system_info())
         # Read image
@@ -20,27 +20,42 @@ def main():
                  width=300,)  # , use_column_width=True)
         st.write(
             f"**Image Details:** Format: {image.format} / Size: {image.size} / Mode: {image.mode}")
-
+        
+        
         with st.spinner("Processing..."):
             df, image_Yolo, sam_img = core.process(image, uploaded_file.name)
+            results.append([df, image_Yolo, sam_img])
         print("To display")
         
-        # Display image
-        st.image(image_Yolo, 
-                  caption="Yolo Detection ",
-                 width=300
-                 )  # , use_column_width=True)
-                 
-                 
-        # Display image
-        st.image(sam_img, clamp=True, #channels='BGR',
-                  caption="Sam Segmentation",
-                 width=300
-                 )  # , use_column_width=True)
-
-        st.dataframe(df)
     else:
-        st.info("Please upload an image file.")
+            st.info("Please upload an image file.")
+        
+    option = st.selectbox(
+            'Choose segmentation method',
+            ('YOLO', 'SAM'))
+    
+    try:
+        if option=='YOLO':
+            # Display image
+            st.image(results[0][1], 
+                    caption="Yolo Detection ",
+                    width=300
+                    )  # , use_column_width=True)
+                    
+        elif option=='SAM':       
+            # Display image
+            st.image(results[0][2], clamp=True, #channels='BGR',
+                    caption="Sam Segmentation",
+                    width=300
+                    )  # , use_column_width=True)
+        if st.button('Show Dataframe'):
+            st.dataframe(results[0][0])
+        else:
+            st.write('No dataframe to display. Upload a PBC image and restart the process')
+
+    except:
+        st.write('Upload an imaage first please!')
+
 
 
 if __name__ == "__main__":
